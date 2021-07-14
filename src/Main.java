@@ -1,8 +1,11 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileReader;
 
 public class Main {
+
     private JPanel MainGui;
     private JButton addButton;
     private JButton addButton1;
@@ -19,6 +22,7 @@ public class Main {
     private JTextField punkteTextField;
     private JTextField punkte;
     private JTextField textField2;
+    private JPasswordField passwordField1;
 
     int punkte1 = 0;
     int punkte3 = 0;
@@ -34,6 +38,22 @@ public class Main {
         MainF.setLocationRelativeTo(null);
         MainF.add(MainGui);
         MainF.setVisible(true);
+
+        FileRader fileRader = new FileRader();
+
+        if(fileRader.dateiexisiert()){
+            fileRader.filelesen();
+            punkte1 = fileRader.getPunkte1();
+            punkte3 = fileRader.getPunkte3();
+            String p1 = String.valueOf(punkte1);
+            String p3 = String.valueOf(punkte3);
+            anzPunkte1.setText(p1);
+            anzPunkte3.setText(p3);
+        }else {
+            fileRader.dateierstellen();
+            System.out.println("Datei erstellt!");
+        }
+
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,6 +64,10 @@ public class Main {
                             punkte1 = punkte1 + p;
                             String s = String.valueOf(punkte1);
                             anzPunkte1.setText(s);
+
+                            fileRader.inFileSchreiben(punkte1, getPunkte3());
+
+                            punkte.setText("");
                         }
                     }catch(Exception exception){
 
@@ -59,6 +83,10 @@ public class Main {
                         punkte3 = punkte3 + p;
                         String s = String.valueOf(punkte3);
                         anzPunkte3.setText(s);
+
+                        fileRader.inFileSchreiben(getPunkte1(), punkte3);
+
+                        punkte.setText("");
                     }
                 }catch(Exception exception){
 
@@ -77,8 +105,21 @@ public class Main {
                 if(anzPunkte1 != null & anzPunkte3 != null & punkte1 == punkte3){
                     textField2.setText("Unenschieden!");
                 }
+                char[] pw = passwordField1.getPassword();
+                String password = String.valueOf(pw);
+                if(password.equals("auswerten")){
+                    fileRader.dateiloeschen();
+                }
             }
         });
+    }
+
+    public int getPunkte1(){
+        return punkte1;
+    }
+
+    public int getPunkte3(){
+        return punkte3;
     }
 
     public static void main(String args[]){
