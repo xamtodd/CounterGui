@@ -1,8 +1,11 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileReader;
 
 public class Main {
+
     private JPanel MainGui;
     private JButton addButton;
     private JButton addButton1;
@@ -34,6 +37,16 @@ public class Main {
         MainF.setLocationRelativeTo(null);
         MainF.add(MainGui);
         MainF.setVisible(true);
+
+        FileRader fileRader = new FileRader();
+
+        if(fileRader.dateiexisiert()){
+            //spielstandherstellen();
+        }else {
+            fileRader.dateierstellen();
+            System.out.println("Datei erstellt!");
+        }
+
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,6 +57,8 @@ public class Main {
                             punkte1 = punkte1 + p;
                             String s = String.valueOf(punkte1);
                             anzPunkte1.setText(s);
+
+                            fileRader.inFileSchreiben(punkte1, getPunkte3());
                         }
                     }catch(Exception exception){
 
@@ -59,6 +74,7 @@ public class Main {
                         punkte3 = punkte3 + p;
                         String s = String.valueOf(punkte3);
                         anzPunkte3.setText(s);
+                        fileRader.inFileSchreiben(getPunkte1(), punkte3);
                     }
                 }catch(Exception exception){
 
@@ -79,6 +95,14 @@ public class Main {
                 }
             }
         });
+    }
+
+    public int getPunkte1(){
+        return punkte1;
+    }
+
+    public int getPunkte3(){
+        return punkte3;
     }
 
     public static void main(String args[]){
