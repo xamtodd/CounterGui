@@ -22,6 +22,7 @@ public class Main {
     private JTextField punkteTextField;
     private JTextField punkte;
     private JTextField textField2;
+    private JPasswordField passwordField1;
 
     int punkte1 = 0;
     int punkte3 = 0;
@@ -41,7 +42,13 @@ public class Main {
         FileRader fileRader = new FileRader();
 
         if(fileRader.dateiexisiert()){
-            //spielstandherstellen();
+            fileRader.filelesen();
+            punkte1 = fileRader.getPunkte1();
+            punkte3 = fileRader.getPunkte3();
+            String p1 = String.valueOf(punkte1);
+            String p3 = String.valueOf(punkte3);
+            anzPunkte1.setText(p1);
+            anzPunkte3.setText(p3);
         }else {
             fileRader.dateierstellen();
             System.out.println("Datei erstellt!");
@@ -59,6 +66,8 @@ public class Main {
                             anzPunkte1.setText(s);
 
                             fileRader.inFileSchreiben(punkte1, getPunkte3());
+
+                            punkte.setText("");
                         }
                     }catch(Exception exception){
 
@@ -74,7 +83,10 @@ public class Main {
                         punkte3 = punkte3 + p;
                         String s = String.valueOf(punkte3);
                         anzPunkte3.setText(s);
+
                         fileRader.inFileSchreiben(getPunkte1(), punkte3);
+
+                        punkte.setText("");
                     }
                 }catch(Exception exception){
 
@@ -92,6 +104,11 @@ public class Main {
                 }
                 if(anzPunkte1 != null & anzPunkte3 != null & punkte1 == punkte3){
                     textField2.setText("Unenschieden!");
+                }
+                char[] pw = passwordField1.getPassword();
+                String password = String.valueOf(pw);
+                if(password.equals("auswerten")){
+                    fileRader.dateiloeschen();
                 }
             }
         });
